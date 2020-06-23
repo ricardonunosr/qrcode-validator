@@ -1,0 +1,29 @@
+.App {
+  background-color: rgb(38, 38, 38);
+  margin-left: 15%;
+  margin-right: 15%;
+  height: 100vh;
+}
+.MainContent {
+  padding: 0.2rem 0.2rem 0 0.2rem;
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+}
+
+.Top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Search {
+  padding: 0.5rem;
+  display: flex;
+}
+
+.Table {
+  width: 50rem;
+  height: 30rem;
+}
