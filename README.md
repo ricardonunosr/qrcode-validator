@@ -4,8 +4,9 @@ This app has the objective to control an automatic system using qrcodes(Ex. Auto
 
 Features:
 
-- [ ] Create QRCode Definitive with time
-- [ ] Create QRCode Temporary(used one time)
+- [x] Create QRCode Definitive
+- [x] Create QRCode Temporary with time
+- [x] Create QRCode Temporary(used one time)
 - [x] Reads data from Qrcode Scanner ([Scanner](https://amzn.to/2YpQRWP) used)
 - [x] Sends signal to micro-controller(Arduino uno)
 - [ ] Prints QRCode

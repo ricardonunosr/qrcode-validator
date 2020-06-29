@@ -1,5 +1,3 @@
-import { toggleLed } from "../../arduino";
-
 export default {
   before: {
     all: [],
@@ -18,11 +16,7 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: [
-      // () => {
-      //   toggleLed();
-      // },
-    ],
+    remove: [],
   },
 
   error: {

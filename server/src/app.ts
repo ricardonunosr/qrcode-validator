@@ -16,6 +16,7 @@ import services from "./services";
 import appHooks from "./app.hooks";
 import channels from "./channels";
 import mongoose from "./mongoose";
+import router from "./services/Validate";
 const SerialPort = require("serialport");
 const Readline = require("@serialport/parser-readline");
 const superagent = require("superagent");
@@ -70,6 +71,8 @@ app.configure(middleware);
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
+
+app.use("", router);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
