@@ -9,7 +9,7 @@ Features:
 - [x] Create QRCode Temporary(used one time)
 - [x] Reads data from Qrcode Scanner ([Scanner](https://amzn.to/2YpQRWP) used)
 - [x] Sends signal to micro-controller(Arduino uno)
-- [ ] Prints QRCode
+- [x] Prints QRCode
 - [ ] Can be locally or remotely
 - [x] RealTime App
 
