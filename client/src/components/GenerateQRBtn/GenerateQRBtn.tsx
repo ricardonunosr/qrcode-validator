@@ -123,6 +123,7 @@ const GenerateQRBtn: React.FC = () => {
                       id="date-picker-dialog"
                       label="Date picker dialog"
                       format="dd/MM/yyyy"
+                      disablePast
                       value={selectedDate}
                       onChange={handleDateChange}
                       KeyboardButtonProps={{
