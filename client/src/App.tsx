@@ -6,56 +6,35 @@ import GenerateQRBtn from './components/GenerateQRBtn';
 import Search from './components/Search';
 
 import { QRCode } from './models/QRCode';
+import Types from './models/Types';
 import client from './services/feathers';
 import './App.css';
 
-interface Data {
-  name: string;
-  dateCreated: string;
-  timeCreated: string;
-}
-
-function createData(
-  name: string,
-  dateCreated: string,
-  timeCreated: string
-): Data {
-  return { name, dateCreated, timeCreated };
-}
-
-const rows: Data[] = [
-  createData('Jose Almeida', '10-05-2020', '10:34:20'),
-  createData('Antonio Almeida', '10-05-2020', '10:34:20'),
-  createData('Andre Almeida', '10-05-2020', '10:34:20'),
-  createData('Irineu Almeida', '10-05-2020', '10:34:20'),
-  createData('Ricardo Ribeiro', '10-05-2020', '10:34:20'),
-  createData('Ricardo Almeida', '10-05-2020', '10:34:20'),
-  createData('Goncalo Almeida', '10-05-2020', '10:34:20'),
-  createData('Francisco Almeida', '10-05-2020', '10:34:20'),
-  createData('Joao Almeida', '10-05-2020', '10:34:20'),
-];
-
 const App: React.FC = () => {
-  const [qrcodes, setQrcodes] = useState<Data[]>([]);
-  const [qrcodesFiltered, setQrcodesFiltered] = useState<Data[]>([]);
+  const [qrcodes, setQrcodes] = useState<QRCode[]>([]);
+  const [qrcodesFiltered, setQrcodesFiltered] = useState<QRCode[]>([]);
 
-  // const fetchAllQRCodes = async () => {
-  //   try {
-  //     const qrcodesService = await client.service('qrcode');
-  //     const entries = await qrcodesService.find();
-  //     setQrcodes(entries.data);
+  const fetchAllQRCodes = async () => {
+    try {
+      const qrcodesService = await client.service('qrcode');
+      const entries = await qrcodesService.find();
+      setQrcodes(entries.data);
+      setQrcodesFiltered(entries.data);
 
-  //     client.service('qrcode').on('created', (qrcode: QRCode) => {
-  //       setQrcodes((qrcodes) => qrcodes.concat(qrcode));
-  //     });
-  //     client.service('qrcode').on('removed', async () => {
-  //       const entries = await client.service('qrcode').find();
-  //       setQrcodes(entries.data);
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      client.service('qrcode').on('created', async () => {
+        const entries = await client.service('qrcode').find();
+        setQrcodes(entries.data);
+        setQrcodesFiltered(entries.data);
+      });
+      client.service('qrcode').on('removed', async () => {
+        const entries = await client.service('qrcode').find();
+        setQrcodes(entries.data);
+        setQrcodesFiltered(entries.data);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const deleteQR = async (uuid: string) => {
     try {
@@ -72,9 +51,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    //fetchAllQRCodes();
-    setQrcodes(rows);
-    setQrcodesFiltered(rows);
+    fetchAllQRCodes();
   }, []);
 
   return (
@@ -82,14 +59,15 @@ const App: React.FC = () => {
       <div className="MainContent">
         <div className="Top">
           <GenerateQRBtn />
-          <div className="Search">
-            <Search qrcodes={qrcodes} setQrcodesFiltered={setQrcodesFiltered} />
-          </div>
+          <Search qrcodes={qrcodes} setQrcodesFiltered={setQrcodesFiltered} />
         </div>
         <div className="Table">
           <ListQR qrcodesFiltered={qrcodesFiltered} deleteQR={deleteQR} />
         </div>
-        <Typography variant="h3">TemporaryQRCodes:{rows.length}</Typography>
+        <Typography variant="h3">
+          OneTimeQRCodes:
+          {qrcodes.filter((qrcode) => qrcode.type === Types.OneTime).length}
+        </Typography>
       </div>
     </div>
   );

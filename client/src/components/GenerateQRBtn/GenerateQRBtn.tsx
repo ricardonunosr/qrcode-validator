@@ -1,89 +1,79 @@
 import React, { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 import ModalQR from '../Modal';
 import client from '../../services/feathers';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    alignContent: 'center',
-  },
-};
-
-const useStyles2 = makeStyles({
-  table: {
-    minWidth: 500,
-  },
-  button: {
-    marginBottom: '10 px',
-  },
-  content_modal: {
-    display: 'block',
-  },
-  button_modal: {
-    display: 'block',
-  },
-});
+import Types from '../../models/Types';
+import useStyles from './styles';
+import ModalStyles from './ModalStyles';
 
 Modal.setAppElement('#root');
 
 const GenerateQRBtn: React.FC = () => {
-  const classes = useStyles2();
+  const classes = useStyles();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [qrcodeData, setQrcodeData] = useState<string>('');
-  const [type, setType] = useState<string>('Temporary');
-  const [nameDefinitive, setNameDefinitive] = useState<string>('');
+  const [type, setType] = useState<string>('onetime');
+  const [flag, setFlag] = useState(false);
+  const [associatedName, setAssociatedName] = useState<string>('');
   const printReference = useRef();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const handlePrint = useReactToPrint({
     content: () => printReference.current,
   });
 
-  const openModal = (data: string) => {
+  const openModal = () => {
     setIsOpen(true);
-    setQrcodeData(data);
   };
 
   const closeModal = () => {
     setIsOpen(false);
     setQrcodeData('');
+    setAssociatedName('');
+    setFlag(false);
   };
 
   const generateQR = async () => {
     try {
       const qrcodesService = await client.service('qrcode');
-      const entrie = await qrcodesService.create({});
-      openModal(entrie.qrcode);
+      if (type === Types.OneTime) {
+        const entrie = await qrcodesService.create({});
+        setQrcodeData(entrie.qrcode);
+        setFlag(true);
+      } else {
+        const entrie = await qrcodesService.create({
+          type: type,
+          validUntil: selectedDate,
+          associatedName: associatedName,
+        });
+        closeModal();
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setType(event.target.value as string);
   };
   const handleChangeName = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setNameDefinitive(event.target.value as string);
+    setAssociatedName(event.target.value as string);
   };
-
-  //   <ModalQR
-  //   className={classes.content_modal}
-  //   qrCodeData={qrcodeData}
-  //   ref={printReference}
-  // />
 
   return (
     <>
@@ -91,37 +81,78 @@ const GenerateQRBtn: React.FC = () => {
         className={classes.button}
         variant="contained"
         color="primary"
-        onClick={generateQR}
+        onClick={openModal}
       >
         Generate QRCode
       </Button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={ModalStyles}
       >
-        <Grid container direction="column" justify="center" alignItems="center">
-          <InputLabel shrink>Type</InputLabel>
-          <Select value={type} onChange={handleChange} displayEmpty>
-            <MenuItem value={'Temporary'}>Temporary</MenuItem>
-            <MenuItem value={'Definitive'}>Definitive</MenuItem>
-          </Select>
-          {type === 'Definitive' ? (
-            <TextField
-              variant="outlined"
-              value={nameDefinitive}
-              onChange={handleChangeName}
+        {flag ? (
+          <div className={classes.modal}>
+            <ModalQR
+              qrcodeData={qrcodeData}
+              ref={printReference}
+              handlePrint={handlePrint}
             />
-          ) : null}
-          <Button
-            className={classes.button_modal}
-            variant="contained"
-            color="primary"
-            onClick={handlePrint}
-          >
-            Print
-          </Button>
-        </Grid>
+            <Button variant="contained" color="primary" onClick={handlePrint}>
+              Print
+            </Button>
+          </div>
+        ) : (
+          <div className={classes.main_modal}>
+            <InputLabel shrink>Type</InputLabel>
+            <Select value={type} onChange={handleChange} displayEmpty>
+              <MenuItem value={'definitive'}>Definitive</MenuItem>
+              <MenuItem value={'temporary'}>Temporary</MenuItem>
+              <MenuItem value={'onetime'}>OneTime</MenuItem>
+            </Select>
+            {type === Types.Definitive || type === Types.Temporary ? (
+              <>
+                <TextField
+                  variant="outlined"
+                  value={associatedName}
+                  onChange={handleChangeName}
+                />
+                {type === Types.Temporary ? (
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      margin="normal"
+                      id="date-picker-dialog"
+                      label="Date picker dialog"
+                      format="dd/MM/yyyy"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                    <KeyboardTimePicker
+                      margin="normal"
+                      id="time-picker"
+                      label="Time picker"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change time',
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                ) : null}
+              </>
+            ) : null}
+            <Button
+              className={classes.button_modal}
+              variant="contained"
+              color="primary"
+              onClick={generateQR}
+            >
+              Generate
+            </Button>
+          </div>
+        )}
       </Modal>
     </>
   );
