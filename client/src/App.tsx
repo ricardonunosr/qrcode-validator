@@ -18,18 +18,18 @@ const App: React.FC = () => {
     try {
       const qrcodesService = await client.service('qrcode');
       const entries = await qrcodesService.find();
-      setQrcodes(entries.data);
-      setQrcodesFiltered(entries.data);
+      setQrcodes(entries);
+      setQrcodesFiltered(entries);
 
       client.service('qrcode').on('created', async () => {
         const entries = await client.service('qrcode').find();
-        setQrcodes(entries.data);
-        setQrcodesFiltered(entries.data);
+        setQrcodes(entries);
+        setQrcodesFiltered(entries);
       });
       client.service('qrcode').on('removed', async () => {
         const entries = await client.service('qrcode').find();
-        setQrcodes(entries.data);
-        setQrcodesFiltered(entries.data);
+        setQrcodes(entries);
+        setQrcodesFiltered(entries);
       });
     } catch (error) {
       console.error(error);
@@ -44,7 +44,7 @@ const App: React.FC = () => {
           uuid: uuid,
         },
       });
-      await qrcodesService.remove(qrcode.data[0]._id);
+      await qrcodesService.remove(qrcode[0]._id);
     } catch (error) {
       console.error(error);
     }
@@ -55,20 +55,18 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="App">
-      <div className="MainContent">
-        <div className="Top">
-          <GenerateQRBtn />
-          <Search qrcodes={qrcodes} setQrcodesFiltered={setQrcodesFiltered} />
-        </div>
-        <div className="Table">
-          <ListQR qrcodesFiltered={qrcodesFiltered} deleteQR={deleteQR} />
-        </div>
-        <Typography variant="h3">
-          OneTimeQRCodes:
-          {qrcodes.filter((qrcode) => qrcode.type === Types.OneTime).length}
-        </Typography>
+    <div className="MainContent">
+      <div className="Top">
+        <GenerateQRBtn />
+        <Search qrcodes={qrcodes} setQrcodesFiltered={setQrcodesFiltered} />
       </div>
+      <div className="Table">
+        <ListQR qrcodesFiltered={qrcodesFiltered} deleteQR={deleteQR} />
+      </div>
+      <Typography variant="h3">
+        OneTimeQRCodes:
+        {qrcodes.filter((qrcode) => qrcode.type === Types.OneTime).length}
+      </Typography>
     </div>
   );
 };

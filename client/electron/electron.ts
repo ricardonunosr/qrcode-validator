@@ -6,13 +6,16 @@ let mainWindow: Electron.BrowserWindow | null;
 function createWindow() {
   // Create the browser window.electron
   mainWindow = new BrowserWindow({
-    height: 600,
+    minWidth: 1024,
+    minHeight: 576,
+    height: 720,
+    width: 1280,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
-    width: 800,
   });
 
+  mainWindow.setMenuBarVisibility(false);
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 

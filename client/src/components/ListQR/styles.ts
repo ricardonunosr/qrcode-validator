@@ -6,9 +6,9 @@ export default makeStyles({
     flexDirection: 'column',
   },
   root: {
-    width: '100%',
+    height: '100%',
   },
   container: {
-    maxHeight: 440,
+    maxHeight: '100%',
   },
 });

@@ -30,10 +30,10 @@ const Search: React.FC<SearchProps> = ({ qrcodes, setQrcodesFiltered }) => {
   return (
     <TextField
       label={
-        <>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <SearchIcon />
           Search
-        </>
+        </div>
       }
       variant="outlined"
       value={searchState}
