@@ -15,7 +15,7 @@ Features:
 
 Tecnologies Used:
 
-- [Electron](https://www.electronjs.org/)(no yet implemented)
+- [Electron](https://www.electronjs.org/)
 - [React](https://reactjs.org/)
 - [FeatherJs](https://feathersjs.com/)
 - [Typescript](https://www.typescriptlang.org/)
