@@ -2,6 +2,9 @@
 
 This app has the objective to control an automatic system using qrcodes(Ex. Automatic Garage Door).
 
+<p align="center">
+  <img src="https://i.imgur.com/OIvKVlv.png" />
+</p>
 Features:
 
 - [x] Create QRCode Definitive
