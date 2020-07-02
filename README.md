@@ -5,7 +5,8 @@ This app has the objective to control an automatic system using qrcodes(Ex. Auto
 <p align="center">
   <img src="https://i.imgur.com/OIvKVlv.png" />
 </p>
-Features:
+
+## Features:
 
 - [x] Create QRCode Definitive
 - [x] Create QRCode Temporary with time
@@ -16,7 +17,7 @@ Features:
 - [ ] Can be locally or remotely
 - [x] RealTime App
 
-Tecnologies Used:
+## 🚀 Tecnologies Used:
 
 - [Electron](https://www.electronjs.org/)
 - [React](https://reactjs.org/)
@@ -36,6 +37,10 @@ Requeriments:
 
 This project is divided into client and server app(Read README.md of the two to start each one).
 
-Creator/Contributors:
+## Creator/Contributors:
 
 - Creator-[ricardonunosr](https://github.com/ricardonunosr)
+
+## 📝 License
+
+This project is under the MIT license. See the [LICENSE](https://github.com/ricardonunosr/qrcode-validator/blob/master/LICENSE) for more information.
