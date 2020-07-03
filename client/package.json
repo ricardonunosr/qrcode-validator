@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "QRCode-Validator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -41,6 +41,14 @@
     "appId": "qrcode.validator",
     "mac": {
       "category": "qrcode"
+    },
+    "win": {
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
     }
   },
   "eslintConfig": {
