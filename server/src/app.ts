@@ -16,34 +16,9 @@ import services from "./services";
 import appHooks from "./app.hooks";
 import channels from "./channels";
 import mongoose from "./mongoose";
-import router from "./services/Validate";
-const SerialPort = require("serialport");
-const Readline = require("@serialport/parser-readline");
-const superagent = require("superagent");
+import router from "./services/validate.route";
+import scannerRouter from "./services/scanner.route";
 // Don't remove this comment. It's needed to format import lines nicely.
-
-// try {
-//   const port = new SerialPort("COM4", {
-//     baudRate: 9600,
-//   });
-//   const parser = port.pipe(new Readline({ delimiter: "\r" }));
-//   parser.on("data", async (data: string) => {
-//     try {
-//       const qrcode = await superagent.get(
-//         `http://localhost:3030/qrcode?uuid=${data}`
-//       );
-//       console.log(`DATA:${data}`);
-//       console.log(qrcode.body.data[0]._id);
-//       await superagent.delete(
-//         `http://localhost:3030/qrcode/${qrcode.body.data[0]._id}`
-//       );
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   });
-// } catch (error) {
-//   console.log(error);
-// }
 
 const app: Application = express(feathers());
 
@@ -73,6 +48,7 @@ app.configure(services);
 app.configure(channels);
 
 app.use("", router);
+app.use("", scannerRouter);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
