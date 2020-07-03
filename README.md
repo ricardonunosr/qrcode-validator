@@ -20,6 +20,7 @@ This app has the objective to control an automatic system using qrcodes(Ex. Auto
 ## 🚀 Tecnologies Used:
 
 - [Electron](https://www.electronjs.org/)
+- [Electron Builder](https://www.electron.build/)
 - [React](https://reactjs.org/)
 - [FeatherJs](https://feathersjs.com/)
 - [Typescript](https://www.typescriptlang.org/)
