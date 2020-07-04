@@ -17,8 +17,9 @@ import appHooks from "./app.hooks";
 import channels from "./channels";
 import mongoose from "./mongoose";
 import router from "./services/validate.route";
-import scannerRouter from "./services/scanner.route";
 // Don't remove this comment. It's needed to format import lines nicely.
+
+require("dotenv-safe").config();
 
 const app: Application = express(feathers());
 
@@ -48,7 +49,6 @@ app.configure(services);
 app.configure(channels);
 
 app.use("", router);
-app.use("", scannerRouter);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());

@@ -4,15 +4,20 @@ import Typography from '@material-ui/core/Typography';
 import ListQR from './components/ListQR';
 import GenerateQRBtn from './components/GenerateQRBtn';
 import Search from './components/Search';
+import Status from './components/Status';
 
 import { QRCode } from './models/QRCode';
 import Types from './models/Types';
 import client from './services/feathers';
+import qrcodeIcon from './assets/qrcodestatus.png';
+import mcIcon from './assets/mcstatus.png';
 import './App.css';
 
 const App: React.FC = () => {
   const [qrcodes, setQrcodes] = useState<QRCode[]>([]);
   const [qrcodesFiltered, setQrcodesFiltered] = useState<QRCode[]>([]);
+  const [scannerStatus, setScannerStatus] = useState(false);
+  const [mcStatus, setMcStatus] = useState(false);
 
   const fetchAllQRCodes = async () => {
     try {
@@ -50,14 +55,50 @@ const App: React.FC = () => {
     }
   };
 
+  const handleScannerStatus = (data: any) => {
+    if (data.status) {
+      setScannerStatus(true);
+    } else {
+      setScannerStatus(false);
+    }
+  };
+
+  const GetScannerStatus = async () => {
+    const data = await client.service('scanner').get(0);
+    handleScannerStatus(data);
+    client.service('scanner').on('status', async (data: any) => {
+      handleScannerStatus(data);
+    });
+  };
+
+  const handleMCStatus = (data: any) => {
+    if (data.status) {
+      setMcStatus(true);
+    } else {
+      setMcStatus(false);
+    }
+  };
+
+  const GetMCStatus = async () => {
+    const data = await client.service('microcontroller').get(0);
+    handleMCStatus(data);
+    client.service('microcontroller').on('status', async (data: any) => {
+      handleMCStatus(data);
+    });
+  };
+
   useEffect(() => {
     fetchAllQRCodes();
+    GetScannerStatus();
+    GetMCStatus();
   }, []);
 
   return (
     <div className="MainContent">
       <div className="Top">
         <GenerateQRBtn />
+        <Status icon={qrcodeIcon} status={scannerStatus} />
+        <Status icon={mcIcon} status={mcStatus} />
         <Search qrcodes={qrcodes} setQrcodesFiltered={setQrcodesFiltered} />
       </div>
       <div className="Table">
