@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 
 import { QRCode } from '../../models/QRCode';
 import Types from '../../models/Types';
-import ModalQR from '../Modal';
+import { ModalQR } from '../ModalQR';
 import useStyles from './styles';
 import ModalStyles from './ModalStyles';
 
@@ -71,11 +71,7 @@ const ListQR: React.FC<ListQRProps> = ({ qrcodesFiltered, deleteQR }) => {
         style={ModalStyles}
       >
         <div className={classes.modal}>
-          <ModalQR
-            qrcodeData={qrcodeData}
-            ref={printReference}
-            handlePrint={handlePrint}
-          />
+          <ModalQR qrcodeData={qrcodeData} ref={printReference} />
           <Button variant="contained" color="primary" onClick={handlePrint}>
             Print
           </Button>

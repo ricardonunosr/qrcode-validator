@@ -13,7 +13,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-import ModalQR from '../Modal';
+import { ModalQR } from '../ModalQR';
 import client from '../../services/feathers';
 import Types from '../../models/Types';
 import useStyles from './styles';
@@ -92,11 +92,7 @@ const GenerateQRBtn: React.FC = () => {
       >
         {flag ? (
           <div className={classes.modal}>
-            <ModalQR
-              qrcodeData={qrcodeData}
-              ref={printReference}
-              handlePrint={handlePrint}
-            />
+            <ModalQR qrcodeData={qrcodeData} ref={printReference} />
             <Button variant="contained" color="primary" onClick={handlePrint}>
               Print
             </Button>
