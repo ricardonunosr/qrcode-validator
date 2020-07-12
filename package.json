@@ -1,0 +1,29 @@
+{
+  "name": "QRCode-Validator",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "build:client": "shx mkdir -p build/public && cd client && yarn build:web && shx cp -r build/* ../build/public",
+    "build:server": "cd server && npm run build && shx cp -r build/. ../build"
+  },
+  "build": {
+    "appId": "qrcode.validator",
+    "mac": {
+      "category": "qrcode"
+    },
+    "win": {
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
+    "shx": "^0.3.2"
+  }
+}
